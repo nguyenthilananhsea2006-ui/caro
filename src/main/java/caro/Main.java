@@ -79,7 +79,7 @@ public class Main extends JFrame {
 
                 // 4. Vẽ chữ (In đậm, Trắng)
                 g2.setColor(Color.WHITE);
-                g2.setFont(new Font("Segoe UI", Font.BOLD, 20));
+                g2.setFont(new Font("Segoe UI", Font.BOLD, 18));
                 FontMetrics fm = g2.getFontMetrics();
                 int textX = (w - fm.stringWidth(getText())) / 2;
                 int textY = (h + fm.getAscent() - fm.getDescent()) / 2 + yOffset;
@@ -104,19 +104,27 @@ public class Main extends JFrame {
         return btn;
     }
 
-    private void startNewGame(boolean vsAI) {
-        String title = vsAI ? "Người vs Máy" : "Người vs Người";
-        String p1 = JOptionPane.showInputDialog(this, "Tên người chơi 1 (X):", title, JOptionPane.PLAIN_MESSAGE);
-        if (p1 == null) return;
-        
-        String p2 = "AI Máy";
-        if (!vsAI) {
-            p2 = JOptionPane.showInputDialog(this, "Tên người chơi 2 (O):", title, JOptionPane.PLAIN_MESSAGE);
-            if (p2 == null) return;
-        }
-        new Caro(vsAI, p1, p2).setVisible(true);
-        this.dispose();
+   private void startNewGame(boolean vsAI) {
+    String title = vsAI ? "CHẾ ĐỘ VS MÁY" : "CHẾ ĐỘ 2 NGƯỜI";
+    
+    // Tạo dialog tùy chỉnh cho Player 1
+    NameInputDialog dialog1 = new NameInputDialog(this, title, "Nhập tên Người chơi 1 (X):");
+    dialog1.setVisible(true);
+    String p1 = dialog1.getInputName();
+    if (p1 == null || p1.trim().isEmpty()) return;
+
+    String p2 = "AI Máy";
+    if (!vsAI) {
+        // Tạo dialog tùy chỉnh cho Player 2
+        NameInputDialog dialog2 = new NameInputDialog(this, title, "Nhập tên Người chơi 2 (O):");
+        dialog2.setVisible(true);
+        p2 = dialog2.getInputName();
+        if (p2 == null || p2.trim().isEmpty()) return;
     }
+
+    new Caro(vsAI, p1, p2).setVisible(true);
+    this.dispose();
+}
 
     private void drawBackground(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
