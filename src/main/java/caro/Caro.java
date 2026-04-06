@@ -284,14 +284,26 @@ public class Caro extends JFrame {
     }
 
     private void playSound(String soundFile) {
-        try {
-            java.net.URL url = getClass().getResource("/res.sounds/" + soundFile);
-            if (url != null) {
-                AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
-                Clip clip = AudioSystem.getClip();
-                clip.open(audioIn);
-                clip.start();
-            }
-        } catch (Exception e) { e.printStackTrace(); }
+    try {
+        // Thêm dấu / ở đầu để đảm bảo tìm từ gốc thư mục resources
+        java.net.URL url = getClass().getResource("/res.sounds/" + soundFile);
+        if (url != null) {
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(url);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioIn);
+            clip.start();
+            
+            // Lắng nghe sự kiện kết thúc để đóng clip, tránh rò rỉ bộ nhớ
+            clip.addLineListener(event -> {
+                if (event.getType() == LineEvent.Type.STOP) {
+                    clip.close();
+                }
+            });
+        } else {
+            System.err.println("Không tìm thấy file âm thanh: " + soundFile);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        }
     }
 }
