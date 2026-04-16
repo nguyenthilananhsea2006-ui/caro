@@ -17,7 +17,7 @@ public class NameInputDialog extends JDialog {
         setUndecorated(true);
         setSize(420, 250);
         setLocationRelativeTo(parent);
-        // Bo góc cho toàn bộ cửa sổ Dialog
+      // Bo góc
         setShape(new RoundRectangle2D.Double(0, 0, getWidth(), getHeight(), 25, 25));
 
         JPanel contentPanel = new JPanel() {
@@ -49,11 +49,11 @@ public class NameInputDialog extends JDialog {
         lblMsg.setBounds(0, 30, 420, 30);
         contentPanel.add(lblMsg);
 
-        // Ô nhập liệu (Màu nhạt hơn + Viền trắng)
+        // Ô nhập liệu 
         textField = new JTextField();
         textField.setBounds(50, 80, 320, 45);
         textField.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        // Màu nền nhạt hơn (Light Brown / Beige)
+        // Màu nền nhạt hơn 
         textField.setBackground(new Color(230, 220, 200)); 
         textField.setForeground(new Color(50, 30, 10));
         textField.setCaretColor(new Color(50, 30, 10));
@@ -64,9 +64,8 @@ public class NameInputDialog extends JDialog {
         ));
         contentPanel.add(textField);
 
-        // --- Cặp nút OK và EXIT ---
         
-        // Nút OK (Xác nhận)
+        // Nút OK 
         JButton btnOk = createStyledButton("OK", 50, 160, 150, 45, new Color(40, 120, 40));
         btnOk.addActionListener(e -> {
             if (!textField.getText().trim().isEmpty()) {
@@ -80,7 +79,7 @@ public class NameInputDialog extends JDialog {
             }
         });
 
-        // Nút EXIT (Hủy bỏ)
+        // Nút EXIT 
         JButton btnExit = createStyledButton("EXIT", 220, 160, 150, 45, new Color(150, 40, 40));
         btnExit.addActionListener(e -> {
             isCancelled = true;
@@ -88,7 +87,7 @@ public class NameInputDialog extends JDialog {
             dispose();
         });
 
-        // Phím tắt Enter và ESC
+       
         textField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -101,7 +100,6 @@ public class NameInputDialog extends JDialog {
         contentPanel.add(btnExit);
     }
 
-    // Hàm hỗ trợ tạo nút bấm phong cách đồng nhất với game
     private JButton createStyledButton(String text, int x, int y, int w, int h, Color baseColor) {
         JButton btn = new JButton(text) {
             @Override
@@ -110,7 +108,7 @@ public class NameInputDialog extends JDialog {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
                 boolean hovered = getModel().isRollover();
-                // Hiệu ứng sáng lên khi hover
+                // Hiệu ứng sáng lên
                 Color c1 = hovered ? baseColor.brighter() : baseColor;
                 Color c2 = baseColor.darker();
                 

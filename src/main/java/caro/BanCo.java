@@ -35,7 +35,14 @@ public class BanCo {
         }
         return false;
     }
-    
+    public boolean isFull() {
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < cols; j++) {
+            if (board[i][j] == ' ') return false; // Vẫn còn ô trống
+        }
+    }
+    return true; // Đã hết ô trống
+}
     public void reset() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {

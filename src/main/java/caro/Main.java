@@ -21,7 +21,7 @@ public class Main extends JFrame {
 
     private void initFrame() {
         setTitle("Cờ Caro - Menu");
-        setSize(750, 750);
+        setSize(700, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -42,7 +42,7 @@ public class Main extends JFrame {
 
     private void addMenuButtons(JPanel panel) {
         int bWidth = 280, bHeight = 60;
-        int startX = (750 - bWidth) / 2;
+        int startX = (700 - bWidth) / 2; 
 
         panel.add(createCustomButton("PLAYER VS PLAYER", startX, 350, bWidth, bHeight, false));
         panel.add(createCustomButton("PLAYER VS AI", startX, 425, bWidth, bHeight, true));
@@ -58,13 +58,13 @@ public class Main extends JFrame {
                 g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
                 boolean isHovered = getModel().isRollover();
-                int yOffset = isHovered ? -2 : 0; // Nhích lên nhẹ khi hover
+                int yOffset = isHovered ? -2 : 0;
 
-                // 1. Đổ bóng nút (Shadow)
+                // 1. Đổ bóng
                 g2.setColor(new Color(0, 0, 0, 120));
                 g2.fillRoundRect(3, 7, w, h, 12, 12);
 
-                // 2. Màu sắc Gradient cho Nút (Theo mã màu bạn yêu cầu)
+                // 2. Gradient gỗ
                 Color colorTop = isHovered ? new Color(255, 225, 120) : new Color(170, 110, 45);
                 Color colorBottom = isHovered ? new Color(210, 130, 35) : new Color(110, 65, 15);
                 
@@ -72,12 +72,12 @@ public class Main extends JFrame {
                 g2.setPaint(gp);
                 g2.fillRoundRect(0, yOffset, w, h, 12, 12);
 
-                // 3. Viền nút sắc nét
+                // 3. Viền
                 g2.setStroke(new BasicStroke(2.5f));
                 g2.setColor(new Color(50, 25, 5));
                 g2.drawRoundRect(0, yOffset, w, h, 12, 12);
 
-                // 4. Vẽ chữ (In đậm, Trắng)
+                // 4. Chữ
                 g2.setColor(Color.WHITE);
                 g2.setFont(new Font("Segoe UI", Font.BOLD, 18));
                 FontMetrics fm = g2.getFontMetrics();
@@ -89,13 +89,12 @@ public class Main extends JFrame {
             }
         };
 
-        btn.setBounds(x, y, w + 10, h + 10); // Thêm khoảng trống cho bóng đổ
+        btn.setBounds(x, y, w + 10, h + 10);
         btn.setContentAreaFilled(false);
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Sự kiện click
         btn.addActionListener(e -> {
             if (text.equals("EXIT GAME")) System.exit(0);
             else startNewGame(vsAI);
@@ -104,35 +103,43 @@ public class Main extends JFrame {
         return btn;
     }
 
-   private void startNewGame(boolean vsAI) {
+    private void startNewGame(boolean vsAI) {
     String title = vsAI ? "CHẾ ĐỘ VS MÁY" : "CHẾ ĐỘ 2 NGƯỜI";
     
-    // Tạo dialog tùy chỉnh cho Player 1
+    // 1. Hiện hộp thoại 
+    SizeSelectionDialog sizeDialog = new SizeSelectionDialog(this);
+    sizeDialog.setVisible(true);
+    int selectedSize = sizeDialog.getSelectedSize();
+    
+    if (selectedSize == -1) return; 
+
+    // 2. Nhập tên Player 1
     NameInputDialog dialog1 = new NameInputDialog(this, title, "Nhập tên Người chơi 1 (X):");
     dialog1.setVisible(true);
     String p1 = dialog1.getInputName();
     if (p1 == null || p1.trim().isEmpty()) return;
 
+    // 3. Nhập tên Player 2 (hoặc AI)
     String p2 = "AI Máy";
     if (!vsAI) {
-        // Tạo dialog tùy chỉnh cho Player 2
         NameInputDialog dialog2 = new NameInputDialog(this, title, "Nhập tên Người chơi 2 (O):");
         dialog2.setVisible(true);
         p2 = dialog2.getInputName();
         if (p2 == null || p2.trim().isEmpty()) return;
     }
 
-    new Caro(vsAI, p1, p2).setVisible(true);
+   
+    new Caro(vsAI, p1, p2, selectedSize).setVisible(true);
     this.dispose();
 }
 
     private void drawBackground(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         if (backgroundImage != null) {
-            g2d.drawImage(backgroundImage, 0, 0, 750, 750, this);
+            g2d.drawImage(backgroundImage, 0, 0, 700, 700, this);
         } else {
-            g2d.setPaint(new GradientPaint(0, 0, new Color(45, 30, 20), 0, 750, new Color(15, 10, 5)));
-            g2d.fillRect(0, 0, 750, 750);
+            g2d.setPaint(new GradientPaint(0, 0, new Color(45, 30, 20), 0, 700, new Color(15, 10, 5)));
+            g2d.fillRect(0, 0, 700, 700);
         }
     }
 
@@ -148,6 +155,11 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
+      
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {}
+        
         SwingUtilities.invokeLater(() -> new Main().setVisible(true));
     }
 }
